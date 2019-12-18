@@ -13,4 +13,6 @@ public interface RfcService {
     int getTotalNumber();
 
     List<DocumentModel> getItemsFromTo(int lowerBound, int upperBound);
+
+    List<DocumentModel> getItemsWithLimit(int rowsToSkip, int rowsOnPage);
 }

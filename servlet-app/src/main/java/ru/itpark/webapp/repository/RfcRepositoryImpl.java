@@ -109,4 +109,19 @@ public class RfcRepositoryImpl implements RfcRepository {
             throw new DataAccessException(e);
         }
     }
+
+    @Override
+    public List<DocumentModel> getWithLimit(int rowsToSkip, int rowsOnPage) {
+        String sqlStmt = "SELECT * FROM (SELECT * FROM rfcs ORDER BY id DESC LIMIT ?,?) ORDER BY id DESC;";
+        try {
+            return jdbcTemplate.queryForList(ds, sqlStmt, mapper, stmt -> {
+                stmt.setInt(1, rowsToSkip);
+                stmt.setInt(2, rowsOnPage);
+                return stmt;
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException(e);
+        }
+    }
 }

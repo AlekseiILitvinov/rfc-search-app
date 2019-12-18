@@ -20,7 +20,7 @@ public class ServletConfig extends GuiceServletContextListener {
         return Guice.createInjector(new ServletModule() {
             @Override
             protected void configureServlets() {
-                serve("/", "/search/*", "/search", "/results", "/remove/*", "/remove/", "/populateASAP").with(MainServlet.class);
+                serve("/", "/page", "/search/*", "/search", "/results", "/remove/*", "/remove/", "/populateASAP").with(MainServlet.class);
                 bind(RfcController.class).to(RfcControllerImpl.class);
                 bind(RfcService.class).to(RfcServiceImpl.class);
                 bind(FileService.class).to(FileServiceImpl.class);

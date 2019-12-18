@@ -28,19 +28,22 @@ public class RfcControllerImpl implements RfcController {
 
     @Override
     public List<DocumentModel> getAllAtPage(int page) {
-        int lowerBound = page*50 + 1;
-        int upperBound = (page+1)*50;
-        int total = getTotalItems();
-        if (upperBound > total){
-            upperBound = total;
-        }
-        return rfcService.getItemsFromTo(lowerBound, upperBound);
+        int rowsOnPage = 10;
+        int rowsToSkip = (page - 1) * rowsOnPage;
+//        int lowerBound = page * 20 + 1;
+//        int upperBound = (page + 1) * 20;
+//        int total = getTotalItems();
+//        if (upperBound > total) {
+//            upperBound = total;
+//        }
+//        return rfcService.getItemsFromTo(lowerBound, upperBound);
+        return rfcService.getItemsWithLimit(rowsToSkip, rowsOnPage);
     }
 
     @Override
     public boolean doSearch(String phrase) {
-        final SearchWorker searchWorker = new SearchWorker(System.getenv("UPLOAD_PATH"), System.getenv("RESULT_PATH"), phrase);
-        searchWorker.search();
+        //final SearchWorker searchWorker = new SearchWorker(System.getenv("UPLOAD_PATH"), System.getenv("RESULT_PATH"), phrase);
+        //searchWorker.search();
         return false;
     }
 
@@ -55,10 +58,10 @@ public class RfcControllerImpl implements RfcController {
         final String submittedFileName = part.getSubmittedFileName();
         long size = part.getSize();
         String sizeSuffix = "B";
-        if (size >= 1024){
+        if (size >= 1024) {
             size /= 1024;
             sizeSuffix = "kB";
-            if (size >= 1024){
+            if (size >= 1024) {
                 size /= 1024;
                 sizeSuffix = "MB";
             }
@@ -73,7 +76,7 @@ public class RfcControllerImpl implements RfcController {
     @Override
     public void removeById(int id) {
         String url = rfcService.remove(id);
-        if (!url.isEmpty()){
+        if (!url.isEmpty()) {
             fileService.eraseFile(url);
         }
     }
@@ -81,7 +84,7 @@ public class RfcControllerImpl implements RfcController {
     @Override
     public boolean hasNextPage(int page) {
         int total = rfcService.getTotalNumber();
-        return (total > 50*(page+1));
+        return (total > 50 * (page + 1));
     }
 
     @Override
@@ -96,24 +99,24 @@ public class RfcControllerImpl implements RfcController {
 //            rfcService.save(download.getName(), download.getSize(), download.getUploadDate(), download.getUrl());
 //        }
 
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 15; i++) {
             String id = UUID.randomUUID().toString();
             final LocalDateTime now = LocalDateTime.now();
             String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
 
-            long size =  fileService.dlSingle(id, i);
+            long size = fileService.dlSingle(id, i);
             if (size > 0) {
                 String sizeSuffix = "B";
-                if (size >= 1024){
+                if (size >= 1024) {
                     size /= 1024;
                     sizeSuffix = "kB";
-                    if (size >= 1024){
+                    if (size >= 1024) {
                         size /= 1024;
                         sizeSuffix = "MB";
                     }
                 }
                 String sizeStr = String.format("%d %s", size, sizeSuffix);
-                rfcService.save("rfc"+i+".txt", sizeStr, uploadDate, id);
+                rfcService.save("rfc" + i + ".txt", sizeStr, uploadDate, id);
             }
         }
     }

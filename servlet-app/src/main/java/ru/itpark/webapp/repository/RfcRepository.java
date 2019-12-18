@@ -17,4 +17,6 @@ public interface RfcRepository {
     void saveItem(String submittedFileName, String size, String date, String url);
 
     List<DocumentModel> getFromTo(int from, int to);
+
+    List<DocumentModel> getWithLimit(int rowsToSkip, int rowsOnPage);
 }

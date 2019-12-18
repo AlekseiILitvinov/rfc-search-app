@@ -48,4 +48,9 @@ public class RfcServiceImpl implements RfcService {
     public List<DocumentModel> getItemsFromTo(int lowerBound, int upperBound) {
         return repository.getFromTo(lowerBound, upperBound);
     }
+
+    @Override
+    public List<DocumentModel> getItemsWithLimit(int rowsToSkip, int rowsOnPage) {
+        return repository.getWithLimit(rowsToSkip, rowsOnPage);
+    }
 }
