@@ -7,11 +7,11 @@
     <parent>
         <artifactId>rfc-search-app</artifactId>
         <groupId>ru.itpark</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <artifactId>servlet-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>war</packaging>
 
     <properties>
@@ -51,10 +51,6 @@
             <groupId>ru.itpark</groupId>
             <artifactId>rfc-worker</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-dbcp</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -73,6 +69,7 @@
                                 <artifactItem>
                                     <groupId>com.github.jsimone</groupId>
                                     <artifactId>webapp-runner</artifactId>
+                                    <destFileName>webapp-runner.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.apache.tomcat</groupId>
