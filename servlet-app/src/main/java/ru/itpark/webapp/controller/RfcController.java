@@ -6,6 +6,7 @@ import ru.itpark.webapp.model.ResultModel;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public interface RfcController {
@@ -25,4 +26,6 @@ public interface RfcController {
     int getTotalItems();
 
     void populate();
+
+    void readResultsFile(String filename, PrintWriter writer);
 }

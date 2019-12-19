@@ -5,9 +5,9 @@ import ru.itpark.webapp.model.DocumentModel;
 
 import javax.inject.Inject;
 import javax.servlet.http.Part;
-import java.io.BufferedInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,7 +37,7 @@ public class FileServiceImpl implements FileService{
 
     @Override
     public String writeFile(Part part) {
-        final String id = UUID.randomUUID().toString();
+        final String id = part.getSubmittedFileName() + UUID.randomUUID().toString() + ".txt";
         try {
             part.write(Paths.get(uploadPath).resolve(id).toString());
         } catch (IOException e) {
@@ -120,5 +120,17 @@ public class FileServiceImpl implements FileService{
             e.printStackTrace();
         }
         return size;
+    }
+
+    @Override
+    public void readFile(Path file, PrintWriter printWriter) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                printWriter.println(line);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

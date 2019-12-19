@@ -25,7 +25,8 @@
                     <a class="nav-link" href="<%= request.getContextPath()%>/results">Results</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" method="GET" action="<%= request.getContextPath() %>search">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="<%= request.getContextPath() %>search"
+                  enctype="multipart/form-data" accept-charset="UTF-8">
                 <input name="phrase" class="form-control mr-sm-2" type="search" placeholder="Search"
                        aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -107,7 +108,7 @@
         <div class="col-12">
             <a href="<%= request.getContextPath() %>page?<%=request.getAttribute("prevPage")%>"
                class="btn btn-outline-primary <%=request.getAttribute("prevPage").equals("false")?"disabled":""%>"
-<%--               <%if (request.getAttribute("prevPage").equals("false")) { %>aria-disabled="true"<%}%>>Previous</a>--%>
+            <%--               <%if (request.getAttribute("prevPage").equals("false")) { %>aria-disabled="true"<%}%>>Previous</a>--%>
                aria-disabled="<%=request.getAttribute("prevPage").equals("false")%>">Previous</a>
             <a href="<%= request.getContextPath() %>page?<%=request.getAttribute("nextPage")%>"
                class="btn btn-outline-primary float-right <%=request.getAttribute("nextPage").equals("false")?"disabled":""%>"
@@ -116,16 +117,17 @@
     </div>
     <% } %>
     <br>
-<%--<form class="card card-sm" method="GET" action="<%= request.getContextPath() %>pages">--%>
-<%--    <input type="hidden" name="action" value="next">--%>
-<%--    <button type="submit" class="button" value="Next">NEXT</button>--%>
-<%--&lt;%&ndash;    <button class="btn btn-lg btn-success" type="submit">next</button>&ndash;%&gt;--%>
-<%--</form>--%>
+    <%--<form class="card card-sm" method="GET" action="<%= request.getContextPath() %>pages">--%>
+    <%--    <input type="hidden" name="action" value="next">--%>
+    <%--    <button type="submit" class="button" value="Next">NEXT</button>--%>
+    <%--&lt;%&ndash;    <button class="btn btn-lg btn-success" type="submit">next</button>&ndash;%&gt;--%>
+    <%--</form>--%>
     <br/>
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <form class="card card-sm" method="GET" action="<%= request.getContextPath() %>search">
+            <form class="card card-sm" method="POST" action="<%= request.getContextPath() %>search"
+                  enctype="multipart/form-data" accept-charset="UTF-8">
                 <div class="card-body row no-gutters align-items-center">
                     <div class="col">
                         <input name="phrase" class="form-control form-control-lg form-control-borderless" type="search"

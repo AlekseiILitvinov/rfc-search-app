@@ -1,55 +1,60 @@
 package ru.itpark.webapp.controller;
 
 import ru.itpark.webapp.model.ResultModel;
+import ru.itpark.webapp.repository.ResultsRepository;
 import ru.itpark.webapp.service.FileService;
 import ru.itpark.webapp.service.RfcService;
 import ru.itpark.webapp.model.DocumentModel;
 import ru.itpark.worker.SearchWorker;
 
 import javax.inject.Inject;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class RfcControllerImpl implements RfcController {
     private RfcService rfcService;
     private FileService fileService;
+    private ResultsRepository resultsRepository;
+    private SearchWorker searchWorker;
 
     @Inject
-    public RfcControllerImpl(RfcService rfcService, FileService fileService) {
+    public RfcControllerImpl(RfcService rfcService, FileService fileService, ResultsRepository resultsRepository) {
         this.rfcService = rfcService;
         this.fileService = fileService;
+        this.resultsRepository = resultsRepository;
+        try {
+            this.searchWorker = new SearchWorker(System.getenv("UPLOAD_PATH"), System.getenv("RESULT_PATH"));
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public List<DocumentModel> getAllAtPage(int page) {
         int rowsOnPage = 10;
         int rowsToSkip = (page - 1) * rowsOnPage;
-//        int lowerBound = page * 20 + 1;
-//        int upperBound = (page + 1) * 20;
-//        int total = getTotalItems();
-//        if (upperBound > total) {
-//            upperBound = total;
-//        }
-//        return rfcService.getItemsFromTo(lowerBound, upperBound);
         return rfcService.getItemsWithLimit(rowsToSkip, rowsOnPage);
     }
 
     @Override
     public boolean doSearch(String phrase) {
-        //final SearchWorker searchWorker = new SearchWorker(System.getenv("UPLOAD_PATH"), System.getenv("RESULT_PATH"), phrase);
-        //searchWorker.search();
-        return false;
+        int resultId = resultsRepository.makeNewQuery(phrase);
+        searchWorker.startSearch(phrase, resultId);
+        return true;
     }
 
     @Override
     public List<ResultModel> getAllResults() {
-        return null;
+        return resultsRepository.getAll();
     }
 
     @Override
@@ -99,8 +104,9 @@ public class RfcControllerImpl implements RfcController {
 //            rfcService.save(download.getName(), download.getSize(), download.getUploadDate(), download.getUrl());
 //        }
 
-        for (int i = 1; i < 15; i++) {
-            String id = UUID.randomUUID().toString();
+        for (int i = 1; i < 200; i++) {
+//            String id = UUID.randomUUID().toString();
+            final String id = "rfc"+i+".txt" + UUID.randomUUID().toString() + ".txt";
             final LocalDateTime now = LocalDateTime.now();
             String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
 
@@ -119,5 +125,11 @@ public class RfcControllerImpl implements RfcController {
                 rfcService.save("rfc" + i + ".txt", sizeStr, uploadDate, id);
             }
         }
+    }
+
+    @Override
+    public void readResultsFile(String filename, PrintWriter writer) {
+        Path resultPath = Paths.get(System.getenv("RESULT_PATH")).resolve(filename);
+        fileService.readFile(resultPath, writer);
     }
 }

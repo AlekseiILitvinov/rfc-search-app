@@ -1,18 +1,21 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: litvi
-  Date: 12/14/2019
-  Time: 2:03 AM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="ru.itpark.webapp.model.ResultModel" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <META http-equiv="refresh" content="5;URL=<%= request.getContextPath()%>/results">
     <title>Title</title>
+    <%@ include file="bootstrap-css.jsp" %>
 </head>
 <body>
-<h2>Done</h2>
-
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <br>
+            <h1>Search initiated</h1>
+            <h3>You are redirected to the Results page</h3>
+        </div>
+    </div>
+</div>
 </body>
 </html>

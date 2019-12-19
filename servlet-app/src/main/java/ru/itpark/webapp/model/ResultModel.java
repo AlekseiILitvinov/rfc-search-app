@@ -8,6 +8,6 @@ import lombok.Data;
 public class ResultModel {
     private int id;
     private String searchPhrase;
+    private String status;
     private String url;
-    private String doneVsTotal;
 }

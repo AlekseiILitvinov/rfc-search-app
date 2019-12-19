@@ -4,6 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
+import ru.itpark.webapp.repository.ResultsRepository;
+import ru.itpark.webapp.repository.ResultsRepositoryImpl;
 import ru.itpark.webapp.repository.RfcRepository;
 import ru.itpark.webapp.repository.RfcRepositoryImpl;
 import ru.itpark.webapp.service.FileService;
@@ -20,11 +22,12 @@ public class ServletConfig extends GuiceServletContextListener {
         return Guice.createInjector(new ServletModule() {
             @Override
             protected void configureServlets() {
-                serve("/", "/page", "/search/*", "/search", "/results", "/remove/*", "/remove/", "/populateASAP").with(MainServlet.class);
+                serve("/", "/page", "/search/*", "/search", "/results", "/resultFile", "/resultFile?", "/remove/*", "/remove/", "/populateASAP").with(MainServlet.class);
                 bind(RfcController.class).to(RfcControllerImpl.class);
                 bind(RfcService.class).to(RfcServiceImpl.class);
                 bind(FileService.class).to(FileServiceImpl.class);
                 bind(RfcRepository.class).to(RfcRepositoryImpl.class);
+                bind(ResultsRepository.class).to(ResultsRepositoryImpl.class);
             }
         });
     }
