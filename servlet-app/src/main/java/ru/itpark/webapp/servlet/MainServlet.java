@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Singleton
 public class MainServlet extends HttpServlet {
@@ -31,22 +30,12 @@ public class MainServlet extends HttpServlet {
         } else if (requestURI.startsWith("/page")) {
             int page = Integer.parseInt(req.getQueryString());
             displayFront(req, resp, page);
-        } else if (requestURI.startsWith("/search")) {
-//            req.setCharacterEncoding("UTF-8");
-            String query = req.getQueryString();
-            final String adapterString = new String(query.getBytes(StandardCharsets.ISO_8859_1), "UTF-8");
-            String phrase = adapterString.substring("phrase=".length());
-//            String phrase = query.substring("phrase=".length());
-            req.setAttribute("isSearchStarted", controller.doSearch(phrase));
-            req.getRequestDispatcher("WEB-INF/confirmation.jsp").forward(req, resp);
         } else if (requestURI.equals("/results")) {
             req.setAttribute("items", controller.getAllResults());
             req.getRequestDispatcher("WEB-INF/results.jsp").forward(req, resp);
         } else if (requestURI.startsWith("/resultFile")){
             String query = req.getQueryString();
             resp.setContentType("text/plain;charset=utf-8");
-//            final String url = req.getRequestURI().substring(req.getContextPath().length());
-//            String filename = url.substring("/results/".length());
             controller.readResultsFile(query, resp.getWriter());
         }else if (requestURI.equals("/populateASAP")) {
             controller.populate();
@@ -68,12 +57,7 @@ public class MainServlet extends HttpServlet {
             controller.removeById(id);
             resp.sendRedirect(rootUrl);
         } else if (req.getRequestURI().startsWith("/search")) {
-//            req.setCharacterEncoding("UTF-8");
-//            String query = req.getQueryString();
             String phrase = req.getParameter("phrase");
-//            final String adapterString = new String(query.getBytes(StandardCharsets.ISO_8859_1), "UTF-8");
-//            String phrase = adapterString.substring("phrase=".length());
-//            String phrase = query.substring("phrase=".length());
             req.setAttribute("isSearchStarted", controller.doSearch(phrase));
             req.getRequestDispatcher("WEB-INF/confirmation.jsp").forward(req, resp);
         }else {

@@ -99,13 +99,8 @@ public class RfcControllerImpl implements RfcController {
 
     @Override
     public void populate() {
-//        List<DocumentModel> downloads = fileService.downloadFromUrl(1, 50, rfcService);
-//        for (DocumentModel download : downloads) {
-//            rfcService.save(download.getName(), download.getSize(), download.getUploadDate(), download.getUrl());
-//        }
 
         for (int i = 1; i < 200; i++) {
-//            String id = UUID.randomUUID().toString();
             final String id = "rfc"+i+".txt" + UUID.randomUUID().toString() + ".txt";
             final LocalDateTime now = LocalDateTime.now();
             String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());

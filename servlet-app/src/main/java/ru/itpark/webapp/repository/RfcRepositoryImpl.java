@@ -5,7 +5,6 @@ import ru.itpark.util.RowMapper;
 import ru.itpark.webapp.exception.DataAccessException;
 import ru.itpark.webapp.model.DocumentModel;
 
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;

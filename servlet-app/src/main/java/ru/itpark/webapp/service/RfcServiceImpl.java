@@ -4,9 +4,7 @@ import ru.itpark.webapp.model.DocumentModel;
 import ru.itpark.webapp.repository.RfcRepository;
 
 import javax.inject.Inject;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +12,7 @@ public class RfcServiceImpl implements RfcService {
     private RfcRepository repository;
 
     @Inject
-    public RfcServiceImpl(RfcRepository repository) throws NamingException {
+    public RfcServiceImpl(RfcRepository repository) {
         this.repository = repository;
         repository.initialize();
     }
