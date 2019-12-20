@@ -19,4 +19,6 @@ public interface FileService {
     long dlSingle(String id, int number);
 
     public void readFile(Path file, PrintWriter printWriter);
+
+    List<DocumentModel> downloadParallel(int start, int stop);
 }

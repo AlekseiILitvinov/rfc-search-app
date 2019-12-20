@@ -37,8 +37,18 @@ public class MainServlet extends HttpServlet {
             String query = req.getQueryString();
             resp.setContentType("text/plain;charset=utf-8");
             controller.readResultsFile(query, resp.getWriter());
-        }else if (requestURI.equals("/populateASAP")) {
-            controller.populate();
+        }else if (requestURI.startsWith("/populateASAP")) {
+            final String queryString = req.getQueryString();
+            final String[] fromTo = queryString.split("-");
+            int fromIndex = 1;
+            int toIndex = 200;
+            if (fromTo.length > 1 ) {
+                fromIndex = Integer.parseInt(fromTo[0]);
+            }
+            if (fromTo.length > 0){
+                toIndex = Integer.parseInt(fromTo[1]);
+            }
+            controller.populateParallel(fromIndex, toIndex);
             displayFront(req, resp, 1);
         } else {
             System.out.println("in routeGet");

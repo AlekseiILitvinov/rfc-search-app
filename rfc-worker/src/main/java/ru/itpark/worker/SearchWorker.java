@@ -54,7 +54,7 @@ public class SearchWorker {
         jdbcTransactionHelper.updateUrl(url, ResultDbId);
         Path pathResult = Paths.get(resultPath).resolve(url);
 
-        final ExecutorService execs = Executors.newFixedThreadPool(4);
+        final ExecutorService execs = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         List<CompletableFuture<Void>> futures = filePaths.stream()
                 .map(path -> CompletableFuture.runAsync(() -> {

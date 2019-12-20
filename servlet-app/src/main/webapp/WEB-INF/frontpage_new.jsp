@@ -44,7 +44,7 @@
             </h3>
             <div class="row mt-3">
                 <div class="col">
-                    <form class="mt-3" method="post" action="<%= request.getContextPath() %>"
+                    <form class="mt-3" method="post" action="<%= request.getContextPath() %>" accept-charset="UTF-8"
                           enctype="multipart/form-data">
                         <fieldset>
                             <div class="form-horizontal">
@@ -53,7 +53,8 @@
                                         <div class="col-md-12">
                                             <div class="input-group">
                                                 <input type="file" class="form-control" id="file" name="file"
-                                                       class="form-control form-control-sm" accept="txt">
+                                                       multiple="multiple" class="form-control form-control-sm"
+                                                       accept="txt">
                                                 <div class="input-group-btn">
                                                     <input type="submit" value="Upload"
                                                            class="rounded-0 btn btn-primary">

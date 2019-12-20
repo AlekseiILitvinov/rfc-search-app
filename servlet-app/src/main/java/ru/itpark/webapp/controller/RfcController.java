@@ -21,11 +21,9 @@ public interface RfcController {
 
     void removeById(int id);
 
-    boolean hasNextPage(int page);
-
     int getTotalItems();
 
-    void populate();
-
     void readResultsFile(String filename, PrintWriter writer);
+
+    void populateParallel(int from, int to);
 }

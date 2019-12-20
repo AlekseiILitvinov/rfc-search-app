@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class RfcControllerImpl implements RfcController {
     private RfcService rfcService;
@@ -67,23 +67,27 @@ public class RfcControllerImpl implements RfcController {
 
     @Override
     public void handlePost(HttpServletRequest req) throws IOException, ServletException {
-        final Part part = req.getPart("file");
-        final String submittedFileName = part.getSubmittedFileName();
-        long size = part.getSize();
-        String sizeSuffix = "B";
-        if (size >= 1024) {
-            size /= 1024;
-            sizeSuffix = "kB";
+
+        final List<Part> rfcFiles = req.getParts().stream().filter(part -> part.getSubmittedFileName().endsWith(".txt")).collect(Collectors.toList());
+
+        for (Part part : rfcFiles) {
+            final String submittedFileName = part.getSubmittedFileName();
+            long size = part.getSize();
+            String sizeSuffix = "B";
             if (size >= 1024) {
                 size /= 1024;
-                sizeSuffix = "MB";
+                sizeSuffix = "kB";
+                if (size >= 1024) {
+                    size /= 1024;
+                    sizeSuffix = "MB";
+                }
             }
+            String sizeStr = String.format("%d %s", size, sizeSuffix);
+            final LocalDateTime now = LocalDateTime.now();
+            String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
+            String url = fileService.writeFile(part);
+            rfcService.save(submittedFileName, sizeStr, uploadDate, url);
         }
-        String sizeStr = String.format("%d %s", size, sizeSuffix);
-        final LocalDateTime now = LocalDateTime.now();
-        String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
-        String url = fileService.writeFile(part);
-        rfcService.save(submittedFileName, sizeStr, uploadDate, url);
     }
 
     @Override
@@ -95,44 +99,25 @@ public class RfcControllerImpl implements RfcController {
     }
 
     @Override
-    public boolean hasNextPage(int page) {
-        int total = rfcService.getTotalNumber();
-        return (total > 50 * (page + 1));
-    }
-
-    @Override
     public int getTotalItems() {
         return rfcService.getTotalNumber();
-    }
-
-    @Override
-    public void populate() {
-
-        for (int i = 1; i < 200; i++) {
-            final String id = "rfc" + i + ".txt" + UUID.randomUUID().toString() + ".txt";
-            final LocalDateTime now = LocalDateTime.now();
-            String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
-
-            long size = fileService.dlSingle(id, i);
-            if (size > 0) {
-                String sizeSuffix = "B";
-                if (size >= 1024) {
-                    size /= 1024;
-                    sizeSuffix = "kB";
-                    if (size >= 1024) {
-                        size /= 1024;
-                        sizeSuffix = "MB";
-                    }
-                }
-                String sizeStr = String.format("%d %s", size, sizeSuffix);
-                rfcService.save("rfc" + i + ".txt", sizeStr, uploadDate, id);
-            }
-        }
     }
 
     @Override
     public void readResultsFile(String filename, PrintWriter writer) {
         Path resultPath = Paths.get(System.getenv("UPLOAD_PATH") + "/results/").resolve(filename);
         fileService.readFile(resultPath, writer);
+    }
+
+    @Override
+    public void populateParallel(int from, int to) {
+
+        List<DocumentModel> downloaded = fileService.downloadParallel(from, to);
+
+        for (DocumentModel documentModel : downloaded) {
+            if (documentModel != null) {
+                rfcService.save(documentModel.getName(), documentModel.getSize(), documentModel.getUploadDate(), documentModel.getUrl());
+            }
+        }
     }
 }
