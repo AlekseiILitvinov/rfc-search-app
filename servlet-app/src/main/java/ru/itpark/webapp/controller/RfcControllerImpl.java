@@ -33,8 +33,9 @@ public class RfcControllerImpl implements RfcController {
         this.fileService = fileService;
         this.resultsRepository = resultsRepository;
         try {
-            String uploadPath = System.getenv("UPLOAD_PATH");
-            String resultPath = uploadPath + "/results";
+            String basePath = System.getenv("UPLOAD_PATH");
+            String uploadPath = basePath + "/upload";
+            String resultPath = basePath + "/results";
             File directory = new File(resultPath);
             if (!directory.exists()) {
                 directory.mkdir();

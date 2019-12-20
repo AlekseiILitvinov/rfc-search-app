@@ -24,7 +24,7 @@ public class FileServiceImpl implements FileService{
     private String uploadPath;
 
     public FileServiceImpl() {
-        uploadPath = System.getenv("UPLOAD_PATH");
+        uploadPath = System.getenv("UPLOAD_PATH") + "/upload";
         try {
             Files.createDirectories(Paths.get(uploadPath));
         } catch (IOException e) {
