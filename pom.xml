@@ -27,6 +27,8 @@
         <sqlite-jdbc.version>3.28.0</sqlite-jdbc.version>
         <guice-servlet.version>4.1.0</guice-servlet.version>
         <guice.version>4.1.0</guice.version>
+        <rfc-worker.version>1.0</rfc-worker.version>
+        <jdbc-template.version>1.0</jdbc-template.version>
     </properties>
 
     <dependencyManagement>
@@ -34,12 +36,12 @@
             <dependency>
                 <groupId>com.github.jsimone</groupId>
                 <artifactId>webapp-runner</artifactId>
-                <version>9.0.27.1</version>
+                <version>${webapp-runner.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.xerial</groupId>
                 <artifactId>sqlite-jdbc</artifactId>
-                <version>3.28.0</version>
+                <version>${sqlite-jdbc.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
@@ -66,23 +68,23 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.10</version>
+                <version>${lombok.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>ru.itpark</groupId>
-                <artifactId>jdbc-template</artifactId>
-                <version>1.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-dbcp</artifactId>
-                <version>9.0.27</version>
+                <version>${tomcat-dbcp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.itpark</groupId>
+                <artifactId>jdbc-template</artifactId>
+                <version>${jdbc-template.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.itpark</groupId>
                 <artifactId>rfc-worker</artifactId>
-                <version>1.0</version>
+                <version>${rfc-worker.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
