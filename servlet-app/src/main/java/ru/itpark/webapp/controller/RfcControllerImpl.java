@@ -12,6 +12,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
@@ -32,7 +33,14 @@ public class RfcControllerImpl implements RfcController {
         this.fileService = fileService;
         this.resultsRepository = resultsRepository;
         try {
-            this.searchWorker = new SearchWorker(System.getenv("UPLOAD_PATH"), System.getenv("RESULT_PATH"));
+            String uploadPath = System.getenv("UPLOAD_PATH");
+            String resultPath = uploadPath + "/results";
+            File directory = new File(resultPath);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            resultPath = resultPath + "/";
+            this.searchWorker = new SearchWorker(uploadPath, resultPath);
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -101,7 +109,7 @@ public class RfcControllerImpl implements RfcController {
     public void populate() {
 
         for (int i = 1; i < 200; i++) {
-            final String id = "rfc"+i+".txt" + UUID.randomUUID().toString() + ".txt";
+            final String id = "rfc" + i + ".txt" + UUID.randomUUID().toString() + ".txt";
             final LocalDateTime now = LocalDateTime.now();
             String uploadDate = String.format("%s %d %d", now.getMonth().toString(), now.getDayOfMonth(), now.getYear());
 
@@ -124,7 +132,7 @@ public class RfcControllerImpl implements RfcController {
 
     @Override
     public void readResultsFile(String filename, PrintWriter writer) {
-        Path resultPath = Paths.get(System.getenv("RESULT_PATH")).resolve(filename);
+        Path resultPath = Paths.get(System.getenv("UPLOAD_PATH") + "/results/").resolve(filename);
         fileService.readFile(resultPath, writer);
     }
 }
